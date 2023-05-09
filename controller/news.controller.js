@@ -26,4 +26,4 @@ exports.getArticle = (req, res) => {
         res.status(200).send(result)
     })
 
-
+}

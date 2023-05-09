@@ -64,20 +64,5 @@ describe('GET: status 200 - responds with an article', () => {
     })
 
 
-                expect(result.body).toEqual([{
-                        description: 'The man, the Mitch, the legend',
-                        slug: 'mitch'
-                    },
-                    {
-                        description: 'Not dogs',
-                        slug: 'cats'
-                    },
-                    {
-                        description: 'what books are made of',
-                        slug: 'paper'
-                    }
-                ])
-            })
-    })
 
 })
