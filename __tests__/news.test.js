@@ -3,7 +3,9 @@ const request = require('supertest')
 const connection = require('../db/connection')
 const data = require('../db/data/test-data')
 const seed = require('../db/seeds/seed')
+
 const endpoints = require('../endpoints.json')
+
 
 
 beforeEach(() => {
@@ -32,6 +34,7 @@ describe('GET: status 200 - responds with an array of topic objects each with sl
             .expect(200)
             .then((result) => {
                 expect(result.body.length).toBe(3);
+
                 expect(result.body[0]).toHaveProperty('description')
                 expect(result.body[0]).toHaveProperty('slug')
             })
@@ -57,6 +60,23 @@ describe('GET: status 200 - responds with an article', () => {
             .then((result) => {
                 expect(result.body[0].title).toBe('Living in the shadow of a great man')
                 expect(result.body[0].topic).toBe('mitch')
+            })
+    })
+
+
+                expect(result.body).toEqual([{
+                        description: 'The man, the Mitch, the legend',
+                        slug: 'mitch'
+                    },
+                    {
+                        description: 'Not dogs',
+                        slug: 'cats'
+                    },
+                    {
+                        description: 'what books are made of',
+                        slug: 'paper'
+                    }
+                ])
             })
     })
 

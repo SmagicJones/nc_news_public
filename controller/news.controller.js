@@ -1,4 +1,5 @@
 const {
+
     fetchTopics,
     fetchApi,
     fetchArticle
@@ -26,4 +27,3 @@ exports.getArticle = (req, res) => {
     })
 
 
-}
