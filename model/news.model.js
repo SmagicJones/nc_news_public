@@ -15,3 +15,7 @@ exports.fetchApi = () => {
     })
 
 }
+
+exports.fetchArticle = () => {
+
+}

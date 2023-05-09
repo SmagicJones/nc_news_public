@@ -1,6 +1,7 @@
 const {
     fetchTopics,
-    fetchApi
+    fetchApi,
+    fetchArticle
 } = require('../model/news.model')
 
 exports.getTopics = (req, res) => {
@@ -14,4 +15,8 @@ exports.getApi = (req, res) => {
         const parsedResult = JSON.parse(result)
         res.status(200).send(parsedResult)
     })
+}
+
+exports.getArticle = (req, res) => {
+
 }

@@ -38,7 +38,7 @@ describe('GET: status 200 - responds with an array of topic objects each with sl
     })
 })
 
-describe.only('GET: status 200 - responds with a JSON object that shows all the possible endpoint', () => {
+describe('GET: status 200 - responds with a JSON object that shows all the possible endpoint', () => {
     it('returns a JSON with all the endpoints detailed.', () => {
         return request(app)
             .get('/api')
@@ -47,4 +47,11 @@ describe.only('GET: status 200 - responds with a JSON object that shows all the 
                 expect(result.body).toEqual(endpoints)
             })
     })
+})
+
+describe('GET: status 200 - responds with an article', () => {
+    it('returns an article using the article_id given', ()=>{
+        return re
+    })
+
 })
