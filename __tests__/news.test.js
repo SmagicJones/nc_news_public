@@ -49,9 +49,15 @@ describe('GET: status 200 - responds with a JSON object that shows all the possi
     })
 })
 
-// describe('GET: status 200 - responds with an article', () => {
-//     it('returns an article using the article_id given', ()=>{
-//         return re
-//     })
+describe('GET: status 200 - responds with an article', () => {
+    it('returns an article using the article_id given', () => {
+        return request(app)
+            .get('/api/articles/1')
+            .expect(200)
+            .then((result) => {
+                expect(result.body[0].title).toBe('Living in the shadow of a great man')
+                expect(result.body[0].topic).toBe('mitch')
+            })
+    })
 
-// })
+})
