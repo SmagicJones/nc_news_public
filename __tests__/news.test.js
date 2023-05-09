@@ -49,9 +49,9 @@ describe('GET: status 200 - responds with a JSON object that shows all the possi
     })
 })
 
-describe('GET: status 200 - responds with an article', () => {
-    it('returns an article using the article_id given', ()=>{
-        return re
-    })
+// describe('GET: status 200 - responds with an article', () => {
+//     it('returns an article using the article_id given', ()=>{
+//         return re
+//     })
 
-})
+// })
