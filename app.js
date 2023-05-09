@@ -5,14 +5,19 @@ const app = express();
 app.use(express.json())
 
 const {
-    getTopics
+
+    getTopics,
+    getApi,
+    getArticle
 } = require('./controller/news.controller')
 
+app.get('/api', getApi)
+app.get('/api/articles/:article_id', getArticle)
 app.get('/api/topics', getTopics)
-
 // app.use((err, req, res, next)=>{
 //     if(err.status &&)
 // })
+
 
 app.all('*', (req, res) => {
     res.status(404).send({
