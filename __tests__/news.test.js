@@ -62,7 +62,17 @@ describe('GET: status 200 - responds with an article', () => {
                 expect(result.body[0].topic).toBe('mitch')
             })
     })
+})
 
-
-
+describe('GET: status 200 - responds with all the articles', () => {
+    it('returns all the articles with a comment count', () => {
+        return request(app)
+            .get('/api/articles')
+            .expect(200)
+            .then((result) => {
+                expect(Number(result.body[0].comment_count)).toBe(2)
+                expect(typeof result.body[0].topic).toBe('string')
+                expect(typeof result.body[0].title).toBe('string')
+            })
+    })
 })

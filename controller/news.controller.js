@@ -2,7 +2,8 @@ const {
 
     fetchTopics,
     fetchApi,
-    fetchArticle
+    fetchArticle,
+    fetchArticles
 } = require('../model/news.model')
 
 exports.getTopics = (req, res, next) => {
@@ -23,6 +24,13 @@ exports.getApi = (req, res) => {
 exports.getArticle = (req, res) => {
     const article_id = req.params.article_id;
     fetchArticle(article_id).then((result) => {
+        res.status(200).send(result)
+    })
+
+}
+
+exports.getArticles = (req, res) => {
+    fetchArticles().then((result) => {
         res.status(200).send(result)
     })
 

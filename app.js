@@ -8,12 +8,14 @@ const {
 
     getTopics,
     getApi,
-    getArticle
+    getArticle,
+    getArticles
 } = require('./controller/news.controller')
 
 app.get('/api', getApi)
 app.get('/api/articles/:article_id', getArticle)
 app.get('/api/topics', getTopics)
+app.get('/api/articles', getArticles)
 // app.use((err, req, res, next)=>{
 //     if(err.status &&)
 // })
