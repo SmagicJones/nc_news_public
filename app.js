@@ -8,15 +8,15 @@ const {
 
     getTopics,
     getApi,
-    getArticle
+    getArticle,
+    getArticles
 } = require('./controller/news.controller')
 
 app.get('/api', getApi)
 app.get('/api/articles/:article_id', getArticle)
 app.get('/api/topics', getTopics)
-// app.use((err, req, res, next)=>{
-//     if(err.status &&)
-// })
+app.get('/api/articles', getArticles)
+
 
 
 app.all('*', (req, res) => {
@@ -24,6 +24,18 @@ app.all('*', (req, res) => {
         message: 'invalid endpoint'
     })
 
+})
+
+app.use((err, req, res, next) => {
+    if (err.status && err.message) {
+        res.status(err.status).send({
+            message: err.message
+        })
+    } else {
+        res.status(500).send({
+            message: 'Interal server error'
+        })
+    }
 })
 
 
