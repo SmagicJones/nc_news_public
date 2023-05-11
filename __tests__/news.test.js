@@ -77,3 +77,23 @@ describe('GET: status 200 - responds with all the articles', () => {
             })
     })
 })
+
+describe('GET: status 200 - resonds with the comments from an article_id', () => {
+    it('returns all the comments from a given article_id', () => {
+        return request(app)
+            .get('/api/articles/1/comments')
+            .expect(200)
+            .then((result) => {
+                result.body.comments.forEach((comment) => {
+                    expect(typeof comment.body).toBe('string')
+                    expect(typeof comment.comment_id).toBe('number')
+                    expect(typeof comment.votes).toBe('number')
+                    expect(typeof comment.created_at).toBe('string')
+                    expect(typeof comment.comment_id).toBe('number')
+                    expect(typeof comment.author).toBe('string')
+                    expect(typeof comment.article_id).toBe('number')
+
+                })
+            })
+    })
+})
