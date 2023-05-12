@@ -42,16 +42,30 @@ exports.fetchArticleComments = (article_id) => {
                 message: "not found"
             })
         }
-    }).then((result) => {
+    }).then(() => {
         return db.query(`SELECT * FROM comments
     WHERE comments.article_id = $1
     ORDER BY created_at DESC`, [article_id]).then((result) => {
-
-
             return result.rows
         })
 
     })
+}
 
+exports.postCommentModel = (article_id, commentObj) => {
+    const {
+        username,
+        body
+    } = commentObj
+    if (Object.keys(commentObj).length === 0 || Object.keys(commentObj).length > 2) {
+        return Promise.reject({
+            status: 404,
+            message: 'not found'
+        })
+    }
+    return db.query('INSERT INTO comments (author, article_id, body) VALUES ($1, $2, $3) RETURNING *;', [username, article_id, body])
+        .then((result) => {
+            return result.rows[0];
+        })
 
 }

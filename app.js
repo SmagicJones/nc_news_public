@@ -10,7 +10,8 @@ const {
     getApi,
     getArticle,
     getArticles,
-    getArticleComments
+    getArticleComments,
+    postComment
 } = require('./controller/news.controller')
 
 app.get('/api', getApi)
@@ -19,7 +20,7 @@ app.get('/api/topics', getTopics)
 app.get('/api/articles', getArticles)
 app.get('/api/articles/:article_id/comments', getArticleComments)
 
-
+app.post('/api/articles/:article_id/comments', postComment)
 
 app.all('/*', (req, res, next) => {
 
@@ -42,11 +43,16 @@ app.use((err, req, res, next) => {
         res.status(400).send({
             message: 'Invalid input'
         })
+    }
+    if (err.code === '23503') {
+        res.status(404).send({
+            message: 'not found'
+        })
     } else next(err)
 })
 
 app.use((err, req, res, next) => {
-    console.log(err);
+    // console.log(err)
     res.status(500).send({
         message: 'Internal Server Error'
     })
