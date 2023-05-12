@@ -21,7 +21,8 @@ app.get('/api/articles/:article_id/comments', getArticleComments)
 
 
 
-app.all('*', (req, res) => {
+app.all('/*', (req, res, next) => {
+
     res.status(404).send({
         message: 'invalid endpoint'
     })
@@ -33,11 +34,22 @@ app.use((err, req, res, next) => {
         res.status(err.status).send({
             message: err.message
         })
-    } else {
-        res.status(500).send({
-            message: 'Interal server error'
+    } else next(err);
+})
+
+app.use((err, req, res, next) => {
+    if (err.code === '22P02') {
+        res.status(400).send({
+            message: 'Invalid input'
         })
-    }
+    } else next(err)
+})
+
+app.use((err, req, res, next) => {
+    console.log(err);
+    res.status(500).send({
+        message: 'Internal Server Error'
+    })
 })
 
 
