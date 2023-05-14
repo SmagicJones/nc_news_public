@@ -5,7 +5,8 @@ const {
     fetchArticle,
     fetchArticles,
     fetchArticleComments,
-    postCommentModel
+    postCommentModel,
+    patchArticleModel
 } = require('../model/news.model')
 
 exports.getTopics = (req, res, next) => {
@@ -68,8 +69,21 @@ exports.postComment = (req, res, next) => {
         })
 
     }).catch((err) => {
-        console.log(err)
+        // console.log(err)
         next(err)
     })
 
+}
+
+exports.patchArticle = (req, res, next) => {
+    article_id = req.params.article_id
+    body = req.body
+    patchArticleModel(article_id, body).then((patch) => {
+        res.status(200).send({
+            patch: patch
+        })
+    }).catch((err) => {
+        // console.log(err)
+        next(err)
+    })
 }

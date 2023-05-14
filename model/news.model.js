@@ -57,15 +57,41 @@ exports.postCommentModel = (article_id, commentObj) => {
         username,
         body
     } = commentObj
-    if (Object.keys(commentObj).length === 0 || Object.keys(commentObj).length > 2) {
+
+    if (!commentObj.hasOwnProperty('username') && !commentObj.hasOwnProperty('body')) {
         return Promise.reject({
-            status: 404,
-            message: 'not found'
+            status: 400,
+            message: 'invalid input'
         })
     }
+
     return db.query('INSERT INTO comments (author, article_id, body) VALUES ($1, $2, $3) RETURNING *;', [username, article_id, body])
         .then((result) => {
             return result.rows[0];
         })
+
+}
+
+exports.patchArticleModel = (article_id, patchObj) => {
+    return db.query('SELECT * FROM articles WHERE article_id = $1', [article_id]).then((result) => {
+        if (result.rows.length === 0) {
+            console.log(result.rows, "something?")
+            return Promise.reject({
+                status: 404,
+                message: 'not found'
+            })
+        }
+    }).then(() => {
+        if (!patchObj.hasOwnProperty('inc_votes')) {
+            return Promise.reject({
+                status: 400,
+                message: 'invalid input'
+            })
+        }
+        return db.query(`UPDATE articles SET votes = votes + ${patchObj.inc_votes} WHERE article_id = $1 RETURNING *;`, [article_id]).then((result) => {
+            return result.rows[0];
+        })
+
+    })
 
 }

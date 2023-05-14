@@ -18,4 +18,8 @@
 
 
 
-SELECT * FROM comments WHERE author = 'icellusedkars';
+-- SELECT * FROM comments WHERE author = 'icellusedkars';
+
+SELECT * FROM articles
+
+-- UPDATE articles SET votes =  WHERE article_id = 1 RETURNING *
