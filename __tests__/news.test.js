@@ -148,3 +148,93 @@ describe('GET: status 404 - responds with not found', () => {
             })
     })
 })
+
+describe('POST: 201', () => {
+    it('returns a status of 201 and the posted comment', () => {
+        const body = {
+            username: 'rogersop',
+            body: 'this is really excellent'
+        }
+        return request(app)
+            .post('/api/articles/1/comments')
+            .send(body)
+            .expect(201)
+            .then((result) => {
+                console.log(result.body.comment.author)
+                expect(result.body.comment.author).toBe('rogersop')
+                expect(result.body.comment.body).toBe('this is really excellent')
+                expect(result.body.comment.votes).toBe(0)
+                expect(result.body.comment.comment_id).toBe(19)
+                console.log(result.body.comment.article_id)
+                expect(result.body.comment.article_id).toBe(1)
+                expect(typeof result.body.comment.created_at).toBe('string')
+            })
+    })
+    it('returns a status 400 and a message of invalid input if given a nonexistent article_id', () => {
+        const body = {
+            username: 'rogersop',
+            body: 'this is really excellent'
+        }
+        return request(app)
+            .post('/api/articles/nothing/comments')
+            .send(body)
+            .expect(400)
+            .then((result) => {
+                expect(result.body.message).toBe('Invalid input')
+            })
+    })
+    it('returns an error if username nonexistent', () => {
+        const body = {
+            username: 'JonnyVegas',
+            body: 'I be big guy'
+        }
+        return request(app)
+            .post('/api/articles/1/comments')
+            .send(body)
+            .expect(404)
+            .then((result) => {
+                expect(result.body.message).toBe('not found')
+            })
+    })
+
+
+
+
+    it('return a status 404 and a message of not found', () => {
+        const body = {
+            username: 'rogersop',
+            body: 'this is really excellent'
+        }
+        return request(app)
+            .post('/api/articles/9999/comments')
+            .send(body)
+            .expect(404)
+            .then((result) => {
+                expect(result.body.message).toBe('not found')
+            })
+    })
+    it('returns an error if asked to post an empty object', () => {
+        const body = {}
+        return request(app)
+            .post('/api/articles/1/comments')
+            .send(body)
+            .expect(404)
+            .then((result) => {
+                expect(result.body.message).toBe('not found')
+            })
+    })
+    it('returns an error if more than two properties are on the object', () => {
+        const body = {
+            username: 'rogersop',
+            body: 'this is really great',
+            somethingElse: 'look at this'
+        }
+        return request(app)
+            .post('/api/articles/1/comments')
+            .send(body)
+            .expect(404)
+            .then((result) => {
+                expect(result.body.message).toBe('not found')
+            })
+    })
+})

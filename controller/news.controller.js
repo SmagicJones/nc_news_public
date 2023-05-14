@@ -4,8 +4,8 @@ const {
     fetchApi,
     fetchArticle,
     fetchArticles,
-    fetArticleComments,
-    fetchArticleComments
+    fetchArticleComments,
+    postCommentModel
 } = require('../model/news.model')
 
 exports.getTopics = (req, res, next) => {
@@ -54,6 +54,21 @@ exports.getArticleComments = (req, res, next) => {
             comments: comments
         })
     }).catch((err) => {
+        next(err)
+    })
+
+}
+
+exports.postComment = (req, res, next) => {
+    article_id = req.params.article_id
+    body = req.body
+    postCommentModel(article_id, body).then((comment) => {
+        res.status(201).send({
+            comment: comment
+        })
+
+    }).catch((err) => {
+        console.log(err)
         next(err)
     })
 
