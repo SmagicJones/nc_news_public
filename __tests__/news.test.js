@@ -34,7 +34,6 @@ describe('GET: status 200 - responds with an array of topic objects each with sl
             .expect(200)
             .then((result) => {
                 expect(result.body.length).toBe(3);
-
                 expect(result.body[0]).toHaveProperty('description')
                 expect(result.body[0]).toHaveProperty('slug')
             })
@@ -160,12 +159,10 @@ describe('POST: 201', () => {
             .send(body)
             .expect(201)
             .then((result) => {
-                console.log(result.body.comment.author)
                 expect(result.body.comment.author).toBe('rogersop')
                 expect(result.body.comment.body).toBe('this is really excellent')
                 expect(result.body.comment.votes).toBe(0)
                 expect(result.body.comment.comment_id).toBe(19)
-                console.log(result.body.comment.article_id)
                 expect(result.body.comment.article_id).toBe(1)
                 expect(typeof result.body.comment.created_at).toBe('string')
             })
@@ -218,9 +215,9 @@ describe('POST: 201', () => {
         return request(app)
             .post('/api/articles/1/comments')
             .send(body)
-            .expect(404)
+            .expect(400)
             .then((result) => {
-                expect(result.body.message).toBe('not found')
+                expect(result.body.message).toBe('invalid input')
             })
     })
     it('returns an error if more than two properties are on the object', () => {
@@ -232,9 +229,82 @@ describe('POST: 201', () => {
         return request(app)
             .post('/api/articles/1/comments')
             .send(body)
+            .expect(201)
+            .then((result) => {
+                expect(result.body.comment.author).toBe('rogersop')
+                expect(result.body.comment.body).toBe('this is really great')
+                expect(result.body.comment.votes).toBe(0)
+                expect(result.body.comment.comment_id).toBe(19)
+                expect(result.body.comment.article_id).toBe(1)
+                expect(typeof result.body.comment.created_at).toBe('string')
+            })
+    })
+})
+
+describe('patch article', () => {
+    it('returns the article with the votes updated by the patched amount', () => {
+        const body = {
+            inc_votes: 1
+        }
+        return request(app)
+            .patch('/api/articles/1')
+            .send(body)
+            .expect(200)
+            .then((result) => {
+                expect(result.body.patch.votes).toBe(101)
+            })
+    })
+    it('returns the article with the votes updated by the patched amount', () => {
+        const body = {
+            inc_votes: -23
+        }
+        return request(app)
+            .patch('/api/articles/2')
+            .send(body)
+            .expect(200)
+            .then((result) => {
+                expect(result.body.patch.votes).toBe(-23)
+            })
+    })
+    it('returns 400 if given a string as an inc_votes', () => {
+        const body = {
+            inc_votes: 'yes'
+        }
+        return request(app)
+            .patch('/api/articles/2')
+            .send(body)
+            .expect(400)
+            .then((result) => {
+                // console.log(result.body)
+                expect(result.body.message).toBe('invalid patch request')
+            })
+    })
+    it('returns a 400 if given an object without the key of inc_votes', () => {
+        const body = {
+            name: "bobby"
+        }
+        return request(app)
+            .patch('/api/articles/2')
+            .send(body)
+            .expect(400)
+            .then((result) => {
+                // console.log(result.body)
+                expect(result.body.message).toBe('invalid input')
+            })
+    })
+
+    it.only('returns a 404 if given an article_id that is a valid request but not found on db', () => {
+        const body = {
+            inc_votes: 23
+        }
+        return request(app)
+            .patch('/api/articles/9999')
+            .send(body)
             .expect(404)
             .then((result) => {
+                console.log(result.body, "look at this")
                 expect(result.body.message).toBe('not found')
             })
     })
+
 })
