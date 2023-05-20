@@ -5,8 +5,11 @@ const {
     fetchArticle,
     fetchArticles,
     fetchArticleComments,
+    fetchUsers,
     postCommentModel,
-    patchArticleModel
+    patchArticleModel,
+    deleteCommentModel
+
 } = require('../model/news.model')
 
 exports.getTopics = (req, res, next) => {
@@ -39,7 +42,14 @@ exports.getArticle = (req, res, next) => {
 }
 
 exports.getArticles = (req, res, next) => {
-    fetchArticles().then((articles) => {
+    const topic = req.query.topic
+    console.log(topic, "topic in the controller")
+    // if (topic.length > 0) {
+    //     console.log('topic query present')
+    //     fetchArticles(topic)
+    // }
+    fetchArticles(topic).then((articles) => {
+        console.log(articles)
         res.status(200).send({
             articles: articles
         })
@@ -58,6 +68,16 @@ exports.getArticleComments = (req, res, next) => {
         next(err)
     })
 
+}
+
+exports.getUsers = (req, res, next) => {
+    fetchUsers().then((users) => {
+        res.status(200).send({
+            users: users
+        })
+    }).catch((err) => {
+        next(err)
+    })
 }
 
 exports.postComment = (req, res, next) => {
@@ -84,6 +104,18 @@ exports.patchArticle = (req, res, next) => {
         })
     }).catch((err) => {
         // console.log(err)
+        next(err)
+    })
+}
+
+exports.deleteComment = (req, res, next) => {
+    comment_id = req.params.comment_id
+    console.log(comment_id)
+    deleteCommentModel(comment_id).then((deleted) => {
+        res.status(204).send({
+            deleted: deleted
+        })
+    }).catch(err => {
         next(err)
     })
 }

@@ -69,12 +69,53 @@ describe('GET: status 200 - responds with all the articles', () => {
             .get('/api/articles')
             .expect(200)
             .then((result) => {
+
                 result.body.articles.forEach((article) => {
                     expect(typeof article.title).toBe('string')
                     expect(typeof article.votes).toBe('number')
                 })
             })
     })
+    // it.only('returns all the articles with a given topic query', () => {
+    //     return request(app)
+    //         .get('/api/articles?topic=cats')
+    //         .expect(200)
+    //         .then((result) => {
+    //             result.body.articles.forEach((article) => {
+    //                 expect(article.topic).toBe('cats')
+    //             })
+    //         })
+    // })
+})
+
+// describe('get articles by a specified topic', () => {
+//     it.only('returns all the articles with a given topic', () => {
+//         return request(app)
+//             .get('/api/articles?topic=cats')
+//             .expect(200)
+//             .then((result) => {
+//                 return result.body.articles.forEach((article) => {
+//                     expect(typeof article.topic).toBe('cats')
+//                 })
+//             })
+//     })
+// })
+
+describe('get users', () => {
+    it('returns all the users', () => {
+        return request(app)
+            .get('/api/users')
+            .expect(200)
+            .then((result) => {
+                result.body.users.forEach((user) => {
+                    expect(typeof user.username).toBe('string')
+                    expect(typeof user.name).toBe('string')
+                    expect(typeof user.avatar_url).toBe('string')
+                })
+            })
+
+    })
+
 })
 
 describe('GET: status 200 - resonds with the comments from an article_id', () => {
@@ -241,7 +282,7 @@ describe('POST: 201', () => {
     })
 })
 
-describe('patch article', () => {
+describe.only('patch article', () => {
     it('returns the article with the votes updated by the patched amount', () => {
         const body = {
             inc_votes: 1
@@ -275,8 +316,7 @@ describe('patch article', () => {
             .send(body)
             .expect(400)
             .then((result) => {
-                // console.log(result.body)
-                expect(result.body.message).toBe('invalid patch request')
+                expect(result.body.message).toBe('Invalid input')
             })
     })
     it('returns a 400 if given an object without the key of inc_votes', () => {
@@ -293,7 +333,7 @@ describe('patch article', () => {
             })
     })
 
-    it.only('returns a 404 if given an article_id that is a valid request but not found on db', () => {
+    it('returns a 404 if given an article_id that is a valid request but not found on db', () => {
         const body = {
             inc_votes: 23
         }
@@ -302,9 +342,27 @@ describe('patch article', () => {
             .send(body)
             .expect(404)
             .then((result) => {
-                console.log(result.body, "look at this")
                 expect(result.body.message).toBe('not found')
             })
     })
 
+})
+
+describe('deleteComment', () => {
+    it('returns an error message for a comment_id that is not found', () => {
+        return request(app)
+            .delete('/api/comments/999999')
+            .expect(400)
+            .then((result) => {
+                expect(result.body.message).toBe('not found')
+            })
+    })
+    it('returns no content', () => {
+        return request(app)
+            .delete('/api/comments/2')
+            .expect(204)
+            .then((result) => {
+                expect(Object.keys(result.body).length).toBe(0)
+            })
+    })
 })

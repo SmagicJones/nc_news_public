@@ -20,6 +20,11 @@
 
 -- SELECT * FROM comments WHERE author = 'icellusedkars';
 
-SELECT * FROM articles
+-- SELECT * FROM comments WHERE comment_id = 1
+
+-- DELETE FROM comments WHERE comment_id = 1 RETURNING *;
+
 
 -- UPDATE articles SET votes =  WHERE article_id = 1 RETURNING *
+
+SELECT * FROM articles WHERE topic LIKE 'cats'
