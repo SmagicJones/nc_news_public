@@ -110,7 +110,18 @@ describe('GET: status 200 - responds with all the articles', () => {
                expect(result.body.message).toBe('not found')
                 })
             })
-    })
+            it('returns all the articles with a given topic query', () => {
+                return request(app)
+                    .get('/api/articles?topic=123')
+                    .expect(404)
+                    .then((result) => {
+                        console.log(result.body)
+                       expect(result.body.message).toBe('not found')
+                        })
+                    })
+            })
+    
+
   
 
 
