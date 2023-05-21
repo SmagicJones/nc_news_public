@@ -31,11 +31,11 @@ exports.fetchArticles = (topic) => {
     ON articles.article_id = comments.article_id
     `;
 
-    // const queryValues = []
-    // if(topic.length > 0){
-    //     queryStr += ` WHERE topic = $1`;
-    //     queryValues.push(topic)
-    // }
+    const queryValues = []
+    if(topic){
+        queryStr += ` WHERE topic = $1`;
+        queryValues.push(topic)
+    }
 
     queryStr += ` GROUP BY articles.article_id
     ORDER BY created_at DESC;`
@@ -44,7 +44,7 @@ exports.fetchArticles = (topic) => {
 
     console.log(queryStr)
 
-    return db.query(queryStr).then((result) => {
+    return db.query(queryStr, queryValues).then((result) => {
 
         return result.rows
     })

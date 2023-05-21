@@ -64,7 +64,7 @@ describe('GET: status 200 - responds with an article', () => {
 })
 
 describe('GET: status 200 - responds with all the articles', () => {
-    it('returns all the articles with a comment count', () => {
+    it.only('returns all the articles with a comment count', () => {
         return request(app)
             .get('/api/articles')
             .expect(200)
@@ -82,16 +82,16 @@ describe('GET: status 200 - responds with all the articles', () => {
                 })
             })
     })
-    // it.only('returns all the articles with a given topic query', () => {
-    //     return request(app)
-    //         .get('/api/articles?topic=cats')
-    //         .expect(200)
-    //         .then((result) => {
-    //             result.body.articles.forEach((article) => {
-    //                 expect(article.topic).toBe('cats')
-    //             })
-    //         })
-    // })
+    it('returns all the articles with a given topic query', () => {
+        return request(app)
+            .get('/api/articles?topic=cats')
+            .expect(200)
+            .then((result) => {
+                result.body.articles.forEach((article) => {
+                    expect(article.topic).toBe('cats')
+                })
+            })
+    })
 })
 
 // describe('get articles by a specified topic', () => {
