@@ -25,16 +25,27 @@ exports.fetchArticle = (article_id) => {
 }
 
 exports.fetchArticles = (topic) => {
-    const queryStr1 = `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, article_img_url, COUNT(comments.article_id) AS comment_count
-    FROM articles`
-    const queryStr2 = ` 
+    let queryStr = `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, article_img_url, COUNT(comments.article_id) AS comment_count
+    FROM articles
     LEFT JOIN comments
     ON articles.article_id = comments.article_id
-    GROUP BY articles.article_id;`
-    const insertTopicQuery = ` \n    WHERE topic = '${topic}'`
-    console.log(queryStr1 + insertTopicQuery + queryStr2, "query string")
-    return db.query(queryStr1 + insertTopicQuery + queryStr2).then((result) => {
-        console.log(result.rows)
+    `;
+
+    // const queryValues = []
+    // if(topic.length > 0){
+    //     queryStr += ` WHERE topic = $1`;
+    //     queryValues.push(topic)
+    // }
+
+    queryStr += ` GROUP BY articles.article_id
+    ORDER BY created_at DESC;`
+   
+    // queryStr+= `GROUP BY articles.article_id;`
+
+    console.log(queryStr)
+
+    return db.query(queryStr).then((result) => {
+
         return result.rows
     })
 }

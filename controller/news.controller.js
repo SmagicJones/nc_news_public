@@ -42,13 +42,9 @@ exports.getArticle = (req, res, next) => {
 }
 
 exports.getArticles = (req, res, next) => {
-    const topic = req.query.topic
-    console.log(topic, "topic in the controller")
-    // if (topic.length > 0) {
-    //     console.log('topic query present')
-    //     fetchArticles(topic)
-    // }
-    fetchArticles(topic).then((articles) => {
+    // const topic = req.query.topic
+
+    fetchArticles().then((articles) => {
         console.log(articles)
         res.status(200).send({
             articles: articles

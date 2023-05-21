@@ -73,6 +73,12 @@ describe('GET: status 200 - responds with all the articles', () => {
                 result.body.articles.forEach((article) => {
                     expect(typeof article.title).toBe('string')
                     expect(typeof article.votes).toBe('number')
+                    expect(typeof article.author).toBe('string')
+                    expect(typeof article.topic).toBe('string')
+                    expect(typeof article.created_at).toBe('string')
+                    expect(typeof article.article_img_url).toBe('string')
+                    expect(typeof article.comment_count).toBe('string')
+
                 })
             })
     })
@@ -282,7 +288,7 @@ describe('POST: 201', () => {
     })
 })
 
-describe.only('patch article', () => {
+describe('patch article', () => {
     it('returns the article with the votes updated by the patched amount', () => {
         const body = {
             inc_votes: 1
