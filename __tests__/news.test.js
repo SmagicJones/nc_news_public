@@ -102,7 +102,7 @@ describe('GET: status 200 - responds with all the articles', () => {
                 })
             })
     })
-    it.only('returns all the articles with a given topic query', () => {
+    it('returns all the articles with a given topic query', () => {
         return request(app)
             .get('/api/articles?topic=gobobgobob')
             .expect(404)
