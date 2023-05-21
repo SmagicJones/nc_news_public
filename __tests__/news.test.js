@@ -92,20 +92,28 @@ describe('GET: status 200 - responds with all the articles', () => {
                 })
             })
     })
-})
+    it('returns all the articles with a given topic query', () => {
+        return request(app)
+            .get('/api/articles?topic=mitch')
+            .expect(200)
+            .then((result) => {
+                result.body.articles.forEach((article) => {
+                    expect(article.topic).toBe('mitch')
+                })
+            })
+    })
+    it.only('returns all the articles with a given topic query', () => {
+        return request(app)
+            .get('/api/articles?topic=gobobgobob')
+            .expect(404)
+            .then((result) => {
+               expect(result.body.message).toBe('not found')
+                })
+            })
+    })
+  
 
-// describe('get articles by a specified topic', () => {
-//     it.only('returns all the articles with a given topic', () => {
-//         return request(app)
-//             .get('/api/articles?topic=cats')
-//             .expect(200)
-//             .then((result) => {
-//                 return result.body.articles.forEach((article) => {
-//                     expect(typeof article.topic).toBe('cats')
-//                 })
-//             })
-//     })
-// })
+
 
 describe('get users', () => {
     it('returns all the users', () => {
