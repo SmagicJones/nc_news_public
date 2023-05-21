@@ -64,7 +64,7 @@ describe('GET: status 200 - responds with an article', () => {
 })
 
 describe('GET: status 200 - responds with all the articles', () => {
-    it.only('returns all the articles with a comment count', () => {
+    it('returns all the articles with a comment count', () => {
         return request(app)
             .get('/api/articles')
             .expect(200)
