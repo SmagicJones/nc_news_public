@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors')
 const app = express();
+const topicRouter = require('./routers/topicRouter');
+const articleRouter = require('./routers/articleRouter');
 
 app.use(cors());
 
@@ -10,35 +12,28 @@ const {
     getApi,
 } = require('./controller/apiController')
 
-const {
-    getTopics,
-} = require('./controller/topicController')
+
 
 const {getUsers} = require('./controller/usersController')
 
-const {postComment, deleteComment} = require('./controller/commentsController')
+const {deleteComment} = require('./controller/commentsController')
 
-const {
-    getArticle,
-    getArticles,
-    getArticleComments,
-    patchArticle
-} = require('./controller/articlesController')
 
 app.get('/api', getApi)
-app.get('/api/articles/:article_id', getArticle)
-app.get('/api/topics', getTopics)
-app.get('/api/articles', getArticles)
-app.get('/api/articles/:article_id/comments', getArticleComments)
+
+app.use('/api/topics', topicRouter)
+
+app.use('/api/articles', articleRouter);
+
+
+
+app.delete('/api/comments/:comment_id', deleteComment)
+
+
 app.get('/api/users', getUsers)
 
 
 
-app.post('/api/articles/:article_id/comments', postComment)
-
-app.patch('/api/articles/:article_id', patchArticle)
-
-app.delete('/api/comments/:comment_id', deleteComment)
 
 
 
