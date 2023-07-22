@@ -418,3 +418,24 @@ describe('deleteComment', () => {
             })
     })
 })
+
+describe('getuser', () =>{
+    it('returns an array of user details', () =>{
+        return request(app)
+        .get('/api/users/rogersop')
+        .expect(200)
+        .then((result)=>{
+            expect(typeof result.body.user[0].name).toBe('string');
+            expect(typeof result.body.user[0].username).toBe('string');
+            expect(typeof result.body.user[0].avatar_url).toBe('string');
+        })
+    })
+    it('retuns 404 when given username not in db', () => {
+        return request(app)
+        .get('/api/users/bobby')
+        .expect(404)
+        .then((result) => {
+            expect(result.body.message).toBe('user not found');
+        })
+    })
+})

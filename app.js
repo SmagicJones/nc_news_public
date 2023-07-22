@@ -31,14 +31,6 @@ app.use('/api/users', usersRouter)
 
 app.use('/api/comments', commentsRouter)
 
-'/api/comments/:comment_id'
-
-
-
-
-
-
-
 
 
 app.all('/*', (req, res, next) => {
