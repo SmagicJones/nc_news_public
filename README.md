@@ -13,8 +13,6 @@ git clone https://github.com/SmagicJones/nc_news_public.git
 
 ```
 $ npm install
-$ npm install -D jest
-$ npm install -D jest-sorted
 
 ```
 
