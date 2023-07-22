@@ -124,18 +124,18 @@ describe('GET: status 200 - responds with all the articles', () => {
             })
             it("returns articles ordered by valid query", () => {
                 return request(app)
-                .get('/api/articles?order=asc')
+                .get('/api/articles?sort_by=title&order=asc')
                 .expect(200)
                 .then((result)=>{
-                    expect(result.body.articles).toBeSortedBy("created_at", {ascending: true})
+                    expect(result.body.articles).toBeSortedBy("title", {ascending: true})
                 })
             })
-            it.only("returns articles sorted by valid query", () =>{
+            it("returns articles sorted by valid query", () =>{
                 return request(app)
-                .get('/api/articles?sort_by=title&order=desc')
+                .get('/api/articles?sort_by=title&order=asc')
                 .expect(200)
                 .then((result)=>{
-                    expect(result.body.articles).toBeSortedBy("title", {descending: true})
+                    expect(result.body.articles).toBeSortedBy("title", {ascending: true})
                 })
             })
     

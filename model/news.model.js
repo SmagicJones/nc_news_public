@@ -24,7 +24,7 @@ exports.fetchArticle = (article_id) => {
     })
 }
 
-exports.fetchArticles = (topic, order, sort_by) => {
+exports.fetchArticles = (topic, order="desc", sort_by="created_at") => {
     let queryStr = `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, article_img_url, COUNT(comments.article_id) AS comment_count
     FROM articles
     LEFT JOIN comments
