@@ -54,14 +54,23 @@ describe('GET: status 200 - responds with a JSON object that shows all the possi
 })
 
 describe('GET: status 200 - responds with an article', () => {
-    it('returns an article using the article_id given', () => {
+    it('returns an article using the article_id given with comment count', () => {
         return request(app)
             .get('/api/articles/1')
             .expect(200)
             .then((result) => {
                 expect(result.body.article[0].title).toBe('Living in the shadow of a great man')
                 expect(result.body.article[0].topic).toBe('mitch')
+                expect(typeof result.body.article[0].comment_count).toBe("string");
             })
+    })
+    it('returns 404 when given a non existent article_id', () =>{
+        return request(app)
+        .get('/api/articles/9999999')
+        .expect(404)
+        .then((result)=>{
+            expect(result.body.message).toBe('No article by that ID');
+        })
     })
 })
 
