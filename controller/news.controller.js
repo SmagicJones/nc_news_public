@@ -43,8 +43,10 @@ exports.getArticle = (req, res, next) => {
 
 exports.getArticles = (req, res, next) => {
     const topic = req.query.topic
+    const order = req.query.order
+    const sort_by = req.query.sort_by
 
-    fetchArticles(topic).then((articles) => {
+    fetchArticles(topic, order, sort_by).then((articles) => {
         res.status(200).send({
             articles: articles
         })

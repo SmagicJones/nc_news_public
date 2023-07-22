@@ -6,6 +6,8 @@ const seed = require('../db/seeds/seed')
 
 const endpoints = require('../endpoints.json')
 
+const sorted = require('jest-sorted');
+
 
 
 beforeEach(() => {
@@ -119,6 +121,22 @@ describe('GET: status 200 - responds with all the articles', () => {
                        expect(result.body.message).toBe('not found')
                         })
                     })
+            })
+            it("returns articles ordered by valid query", () => {
+                return request(app)
+                .get('/api/articles?order=asc')
+                .expect(200)
+                .then((result)=>{
+                    expect(result.body.articles).toBeSortedBy("created_at", {ascending: true})
+                })
+            })
+            it.only("returns articles sorted by valid query", () =>{
+                return request(app)
+                .get('/api/articles?sort_by=title&order=desc')
+                .expect(200)
+                .then((result)=>{
+                    expect(result.body.articles).toBeSortedBy("title", {descending: true})
+                })
             })
     
 
