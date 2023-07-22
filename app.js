@@ -3,6 +3,8 @@ const cors = require('cors')
 const app = express();
 const topicRouter = require('./routers/topicRouter');
 const articleRouter = require('./routers/articleRouter');
+const usersRouter = require('./routers/usersRouter');
+const commentsRouter = require('./routers/commentsRouter');
 
 app.use(cors());
 
@@ -14,9 +16,9 @@ const {
 
 
 
-const {getUsers} = require('./controller/usersController')
+// const {getUsers} = require('./controller/usersController')
 
-const {deleteComment} = require('./controller/commentsController')
+
 
 
 app.get('/api', getApi)
@@ -25,12 +27,14 @@ app.use('/api/topics', topicRouter)
 
 app.use('/api/articles', articleRouter);
 
+app.use('/api/users', usersRouter)
+
+app.use('/api/comments', commentsRouter)
+
+'/api/comments/:comment_id'
 
 
-app.delete('/api/comments/:comment_id', deleteComment)
 
-
-app.get('/api/users', getUsers)
 
 
 
