@@ -25,13 +25,13 @@ In order to connect to the the test and development databases you must set up yo
 .env.test should contain:
 
 ```
-PGDATABASE=nc_news
+PGDATABASE=nc_news_test
 ```
 
 .env.development should contain:
 
 ```
-PGDATABASE=nc_news_test
+PGDATABASE=nc_news
 ```
 
 ## Seed the Databases
