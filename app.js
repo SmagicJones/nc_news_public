@@ -7,16 +7,23 @@ app.use(cors());
 app.use(express.json())
 
 const {
-    getTopics,
     getApi,
+} = require('./controller/apiController')
+
+const {
+    getTopics,
+} = require('./controller/topicController')
+
+const {getUsers} = require('./controller/usersController')
+
+const {postComment, deleteComment} = require('./controller/commentsController')
+
+const {
     getArticle,
     getArticles,
     getArticleComments,
-    postComment,
-    patchArticle,
-    deleteComment,
-    getUsers,
-} = require('./controller/news.controller')
+    patchArticle
+} = require('./controller/articlesController')
 
 app.get('/api', getApi)
 app.get('/api/articles/:article_id', getArticle)
