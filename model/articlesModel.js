@@ -92,3 +92,39 @@ exports.patchArticleModel = (article_id, patchObj) => {
     })
 
 }
+
+exports.postArticleModel = (articleObj) => {
+    const {
+        author,
+        title,
+        topic,
+        body,
+        article_img_url
+    } = articleObj
+
+    if (!articleObj.hasOwnProperty('author') && !articleObj.hasOwnProperty('title') && !articleObj.hasOwnProperty('body') && !articleObj.hasOwnProperty('topic') && !articleObj.hasOwnProperty('article_img_url')) {
+        return Promise.reject({
+            status: 400,
+            message: 'invalid input'
+        })
+    }
+    console.log(body);
+
+    return db.query('INSERT INTO articles (author, title, topic, body, article_img_url) VALUES ($1, $2, $3, $4, $5) RETURNING *;', [author, title, topic, body, article_img_url])
+        .then((result) => {
+           return result.rows[0]
+    
+        }).then((result)=>{
+            return db.query(`
+                SELECT articles.*, COUNT(comments.article_id)
+                FROM articles
+                LEFT JOIN comments USING (article_id)
+                WHERE article_id in ($1)
+                GROUP BY articles.article_id`, [result.article_id])
+        })
+
+        .then((result)=>{
+            return result.rows[0]
+        })
+
+}

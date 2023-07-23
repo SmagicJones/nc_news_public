@@ -4,6 +4,7 @@ const {
     fetchArticles,
     fetchArticleComments,
     patchArticleModel,
+    postArticleModel,
 
 } = require('../model/articlesModel')
 
@@ -35,7 +36,7 @@ exports.getArticles = (req, res, next) => {
 }
 
 exports.getArticleComments = (req, res, next) => {
-    article_id = req.params.article_id
+    const article_id = req.params.article_id
     fetchArticleComments(article_id).then((comments) => {
         res.status(200).send({
             comments: comments
@@ -47,8 +48,8 @@ exports.getArticleComments = (req, res, next) => {
 }
 
 exports.patchArticle = (req, res, next) => {
-    article_id = req.params.article_id
-    body = req.body
+   const  article_id = req.params.article_id
+    const body = req.body
     patchArticleModel(article_id, body).then((patch) => {
         res.status(200).send({
             patch: patch
@@ -57,4 +58,16 @@ exports.patchArticle = (req, res, next) => {
         // console.log(err)
         next(err)
     })
+}
+
+exports.postArticle = (req, res, next) => {
+    const newArticle = req.body
+    postArticleModel(newArticle).then((article) => {
+        res.status(201).send({
+            article: article
+        })
+    }).catch((err) => {
+        next(err)
+    })
+
 }

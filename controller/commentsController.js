@@ -2,15 +2,14 @@ const {postCommentModel, deleteCommentModel, patchCommentModel} = require('../mo
 
 
 exports.postComment = (req, res, next) => {
-    article_id = req.params.article_id
-    body = req.body
+    const article_id = req.params.article_id
+    const body = req.body
     postCommentModel(article_id, body).then((comment) => {
         res.status(201).send({
             comment: comment
         })
 
     }).catch((err) => {
-        // console.log(err)
         next(err)
     })
 

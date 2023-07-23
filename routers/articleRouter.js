@@ -4,14 +4,16 @@ const {
     getArticle,
     getArticles,
     getArticleComments,
-    patchArticle
+    patchArticle,
+    postArticle
 } = require('../controller/articlesController');
 
-const {postComment, deleteComment} = require('../controller/commentsController')
+const {postComment} = require('../controller/commentsController')
 
 
 router.route('/')
-    .get(getArticles);
+    .get(getArticles)
+    .post(postArticle)
 router.route('/:article_id')
     .get(getArticle)
     .patch(patchArticle);

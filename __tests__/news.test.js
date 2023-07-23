@@ -506,3 +506,38 @@ describe('patch comment', () => {
     })
 
 })
+
+describe('POST article: 201', () => {
+    it('returns a status of 201 and the posted article', () => {
+        const body = {
+            author: 'rogersop',
+            title: 'this is really excellent',
+            topic: 'mitch',
+            body: 'Something something something',
+            article_img_url: 'www.bob.com'
+        }
+        return request(app)
+            .post('/api/articles')
+            .send(body)
+            .expect(201)
+            .then((result) => {
+                expect(result.body.article.author).toBe('rogersop')
+                expect(result.body.article.title).toBe('this is really excellent')
+                expect(result.body.article.topic).toBe('mitch')
+                expect(result.body.article.body).toBe('Something something something')
+                expect(result.body.article.article_img_url).toBe('www.bob.com')
+            })
+    })
+   
+   
+    it('returns an error if passed an empty object', () => {
+        const body = {}
+        return request(app)
+            .post('/api/articles')
+            .send(body)
+            .expect(400)
+            .then((result) => {
+              expect(result.body.message).toBe('invalid input')
+            })
+    })
+})
