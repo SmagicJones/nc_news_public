@@ -439,3 +439,70 @@ describe('getuser', () =>{
         })
     })
 })
+
+
+describe('patch comment', () => {
+    it('returns the comment with the votes updated by the patched amount', () => {
+        const body = {
+            inc_votes: 1
+        }
+        return request(app)
+            .patch('/api/comments/1')
+            .send(body)
+            .expect(200)
+            .then((result) => {
+                expect(result.body.patch.votes).toBe(17)
+            })
+    })
+    it('returns the article with the votes updated by the patched amount', () => {
+        const body = {
+            inc_votes: -5
+        }
+        return request(app)
+            .patch('/api/comments/2')
+            .send(body)
+            .expect(200)
+            .then((result) => {
+                expect(result.body.patch.votes).toBe(9)
+            })
+    })
+    it('returns 400 if given a string as an inc_votes', () => {
+        const body = {
+            inc_votes: 'yes'
+        }
+        return request(app)
+            .patch('/api/comments/2')
+            .send(body)
+            .expect(400)
+            .then((result) => {
+                expect(result.body.message).toBe('Invalid input')
+            })
+    })
+    it('returns a 400 if given an object without the key of inc_votes', () => {
+        const body = {
+            name: "bobby"
+        }
+        return request(app)
+            .patch('/api/comments/2')
+            .send(body)
+            .expect(400)
+            .then((result) => {
+                // console.log(result.body)
+                expect(result.body.message).toBe('invalid input')
+            })
+    })
+
+    it('returns a 404 if given an article_id that is a valid request but not found on db', () => {
+        const body = {
+            inc_votes: 23
+        }
+        return request(app)
+            .patch('/api/comments/9999')
+            .send(body)
+            .expect(404)
+            .then((result) => {
+                expect(result.body.message).toBe('not found')
+            })
+    })
+
+})

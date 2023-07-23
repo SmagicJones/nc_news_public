@@ -15,12 +15,6 @@ const {
 } = require('./controller/apiController')
 
 
-
-// const {getUsers} = require('./controller/usersController')
-
-
-
-
 app.get('/api', getApi)
 
 app.use('/api/topics', topicRouter)
