@@ -13,7 +13,7 @@ const {postComment} = require('../controller/commentsController')
 
 router.route('/')
     .get(getArticles)
-    .post(postArticle)
+    .post(postArticle)    
 router.route('/:article_id')
     .get(getArticle)
     .patch(patchArticle);

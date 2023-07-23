@@ -126,7 +126,6 @@ describe('GET: status 200 - responds with all the articles', () => {
                     .get('/api/articles?topic=123')
                     .expect(404)
                     .then((result) => {
-                        console.log(result.body)
                        expect(result.body.message).toBe('not found')
                         })
                     })
@@ -145,6 +144,15 @@ describe('GET: status 200 - responds with all the articles', () => {
                 .expect(200)
                 .then((result)=>{
                     expect(result.body.articles).toBeSortedBy("title", {ascending: true})
+                })
+            })
+            it('returns articles limited by the given limit', () =>{
+                return request(app)
+                .get('/api/articles?limit=2')
+                .expect(200)
+                .then((result) => {
+                    console.log(result.body)
+                    expect(result.body.articles.length).toBe(2)
                 })
             })
     

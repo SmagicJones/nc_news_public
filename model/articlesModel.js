@@ -15,7 +15,7 @@ exports.fetchArticle = (article_id) => {
     })
 }
 
-exports.fetchArticles = (topic, order="desc", sort_by="created_at") => {
+exports.fetchArticles = (topic, order="desc", sort_by="created_at", limit=10, p=1) => {
     let queryStr = `SELECT articles.author, articles.title, articles.article_id, articles.topic, articles.created_at, articles.votes, article_img_url, COUNT(comments.article_id) AS comment_count
     FROM articles
     LEFT JOIN comments
@@ -23,28 +23,33 @@ exports.fetchArticles = (topic, order="desc", sort_by="created_at") => {
     `;
 
     const queryValues = []
+    let countQ = 'SELECT COUNT(*)::INT FROM articles'
     const validOrders = ["desc", "asc"];
     const validSortBy = ["created_at", "title", "topic", "author", "comment_count", "votes"];
     if(!validOrders.includes(order) || !validSortBy.includes(sort_by)){
         return Promise.reject({status: 400, message: "invalid order"})
     }
     if(topic){
+        countQ += ` WHERE articles.topic = $1`;
         queryStr += ` WHERE topic = $1`;
         queryValues.push(topic)
     }
 
     queryStr += ` GROUP BY articles.article_id
-    ORDER BY ${sort_by} ${order};`
+    ORDER BY ${sort_by} ${order}
+    LIMIT ${limit} OFFSET ${(p-1) * limit}`
    
    
 
-    return db.query(queryStr, queryValues).then((result) => {
+    return db.query(queryStr, queryValues)
+    .then((result) => {
         if(result.rows.length === 0){
             return Promise.reject({
                 status: 404,
                 message: "not found"
             })
         }
+
 
         return result.rows
     })
