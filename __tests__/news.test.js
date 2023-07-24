@@ -80,8 +80,12 @@ describe('GET: status 200 - responds with all the articles', () => {
             .get('/api/articles')
             .expect(200)
             .then((result) => {
+               
+                const {articles} = result.body.articles
+               
+              
 
-                result.body.articles.forEach((article) => {
+                    articles.forEach((article) => {
                     expect(typeof article.title).toBe('string')
                     expect(typeof article.votes).toBe('number')
                     expect(typeof article.author).toBe('string')
@@ -91,6 +95,10 @@ describe('GET: status 200 - responds with all the articles', () => {
                     expect(typeof article.comment_count).toBe('string')
 
                 })
+
+               
+
+                expect(typeof result.body.articles.total_count[0].count).toBe('number')
             })
     })
     it('returns all the articles with a given topic query', () => {
@@ -98,19 +106,22 @@ describe('GET: status 200 - responds with all the articles', () => {
             .get('/api/articles?topic=cats')
             .expect(200)
             .then((result) => {
-                result.body.articles.forEach((article) => {
+                const {articles} = result.body.articles;
+                articles.forEach((article) => {
                     expect(article.topic).toBe('cats')
                 })
             })
     })
     it('returns all the articles with a given topic query', () => {
         return request(app)
-            .get('/api/articles?topic=mitch')
+            .get('/api/articles?topic=mitch&limit=20')
             .expect(200)
             .then((result) => {
-                result.body.articles.forEach((article) => {
+                const {articles} = result.body.articles;
+                articles.forEach((article) => {
                     expect(article.topic).toBe('mitch')
                 })
+               
             })
     })
     it('returns all the articles with a given topic query', () => {
@@ -135,7 +146,8 @@ describe('GET: status 200 - responds with all the articles', () => {
                 .get('/api/articles?sort_by=title&order=asc')
                 .expect(200)
                 .then((result)=>{
-                    expect(result.body.articles).toBeSortedBy("title", {ascending: true})
+                    const {articles} = result.body.articles;
+                    expect(articles).toBeSortedBy("title", {ascending: true})
                 })
             })
             it("returns articles sorted by valid query", () =>{
@@ -143,7 +155,8 @@ describe('GET: status 200 - responds with all the articles', () => {
                 .get('/api/articles?sort_by=title&order=asc')
                 .expect(200)
                 .then((result)=>{
-                    expect(result.body.articles).toBeSortedBy("title", {ascending: true})
+                    const {articles} = result.body.articles;
+                    expect(articles).toBeSortedBy("title", {ascending: true})
                 })
             })
             it('returns articles limited by the given limit', () =>{
@@ -151,8 +164,9 @@ describe('GET: status 200 - responds with all the articles', () => {
                 .get('/api/articles?limit=2')
                 .expect(200)
                 .then((result) => {
-                    console.log(result.body)
-                    expect(result.body.articles.length).toBe(2)
+                    const {articles} = result.body.articles;
+                    expect(articles.length).toBe(2)
+                    
                 })
             })
     
@@ -388,7 +402,6 @@ describe('patch article', () => {
             .send(body)
             .expect(400)
             .then((result) => {
-                // console.log(result.body)
                 expect(result.body.message).toBe('invalid input')
             })
     })
@@ -495,7 +508,6 @@ describe('patch comment', () => {
             .send(body)
             .expect(400)
             .then((result) => {
-                // console.log(result.body)
                 expect(result.body.message).toBe('invalid input')
             })
     })

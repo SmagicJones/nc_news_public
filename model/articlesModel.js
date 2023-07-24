@@ -43,16 +43,22 @@ exports.fetchArticles = (topic, order="desc", sort_by="created_at", limit=10, p=
 
     return db.query(queryStr, queryValues)
     .then((result) => {
-        if(result.rows.length === 0){
+    
+      if(result.rows.length === 0){
             return Promise.reject({
                 status: 404,
                 message: "not found"
-            })
-        }
+            })  
+        }   
 
-
-        return result.rows
+     
+        return Promise.all([result.rows, db.query(countQ, queryValues)])
     })
+   .then(([articles, {rows}]) => {
+    
+        const total_count = rows;
+        return {articles, total_count};
+   })
 }
 
 
@@ -113,7 +119,7 @@ exports.postArticleModel = (articleObj) => {
             message: 'invalid input'
         })
     }
-    console.log(body);
+   
 
     return db.query('INSERT INTO articles (author, title, topic, body, article_img_url) VALUES ($1, $2, $3, $4, $5) RETURNING *;', [author, title, topic, body, article_img_url])
         .then((result) => {
