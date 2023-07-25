@@ -261,6 +261,22 @@ describe('GET: status 404 - responds with not found', () => {
                 expect(result.body.message).toBe('not found')
             })
     })
+    it('returns comments limted by the given limit query', () =>{
+        return request(app)
+        .get('/api/articles/1/comments?limit=2')
+        .expect(200)
+        .then((result) =>{
+            expect(result.body.comments.length).toBe(2)
+        })
+    })
+    it('returns an error if an invalid limit is given', () => {
+        return request(app)
+        .get('/api/articles/1/comments?limit=bob')
+        .expect(400)
+        .then((result) =>{
+            expect(result.body.message).toBe('This is not a valid limit');
+        })
+    })
 })
 
 describe('POST: 201', () => {
@@ -354,6 +370,7 @@ describe('POST: 201', () => {
                 expect(typeof result.body.comment.created_at).toBe('string')
             })
     })
+   
 })
 
 describe('patch article', () => {
@@ -558,6 +575,23 @@ describe('POST article: 201', () => {
             .expect(400)
             .then((result) => {
               expect(result.body.message).toBe('invalid input')
+            })
+    })
+})
+
+describe('201, new topic posted', () => {
+    it('returns topics including the new one', () => {
+        const body = {
+            slug: "this is awesome",
+            description: "the best thing you will ever read"
+        }
+        return request(app)
+            .post('/api/topics')
+            .send(body)
+            .expect(201)
+            .then((result) => {
+               expect(result.body.topic.slug).toBe('this is awesome');
+               expect(result.body.topic.description).toBe('the best thing you will ever read');
             })
     })
 })

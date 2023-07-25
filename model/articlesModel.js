@@ -29,11 +29,21 @@ exports.fetchArticles = (topic, order="desc", sort_by="created_at", limit=10, p=
     if(!validOrders.includes(order) || !validSortBy.includes(sort_by)){
         return Promise.reject({status: 400, message: "invalid order"})
     }
+
+    if(isNaN(limit)){
+        return Promise.reject({status: 400, message: "This is not a valid limit"});
+    }
+    if(isNaN(p)){
+        return Promise.reject({status: 400, message: "This is not a valid limit"});
+    }
+    
     if(topic){
         countQ += ` WHERE articles.topic = $1`;
         queryStr += ` WHERE topic = $1`;
         queryValues.push(topic)
     }
+
+   
 
     queryStr += ` GROUP BY articles.article_id
     ORDER BY ${sort_by} ${order}
@@ -63,7 +73,7 @@ exports.fetchArticles = (topic, order="desc", sort_by="created_at", limit=10, p=
 
 
 
-exports.fetchArticleComments = (article_id) => {
+exports.fetchArticleComments = (article_id, limit=10, p=1) => {
     return db.query(`SELECT * FROM articles WHERE article_id = $1`, [article_id]).then((result) => {
         if (result.rows.length === 0) {
             return Promise.reject({
@@ -71,10 +81,18 @@ exports.fetchArticleComments = (article_id) => {
                 message: "not found"
             })
         }
+        if(isNaN(limit)){
+            return Promise.reject({status: 400, message: "This is not a valid limit"});
+        }
+        if(isNaN(p)){
+            return Promise.reject({status: 400, message: "This is not a valid limit"});
+        }
+
     }).then(() => {
         return db.query(`SELECT * FROM comments
     WHERE comments.article_id = $1
-    ORDER BY created_at DESC`, [article_id]).then((result) => {
+    ORDER BY created_at DESC
+    LIMIT ${limit} OFFSET ${(p-1) * limit}`, [article_id]).then((result) => {
             return result.rows
         })
 
