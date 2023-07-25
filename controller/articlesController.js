@@ -5,6 +5,7 @@ const {
     fetchArticleComments,
     patchArticleModel,
     postArticleModel,
+    deleteArticleModel,
 
 } = require('../model/articlesModel')
 
@@ -68,5 +69,18 @@ exports.postArticle = (req, res, next) => {
     }).catch((err) => {
         next(err)
     })
-
 }
+
+exports.deleteArticle = (req, res, next) => {
+    const article_id = req.params.article_id;
+    return deleteArticleModel(article_id).then((deleted) => {
+        res.status(204).send({
+            deleted: deleted
+        })
+    }).catch((err) => {
+        next(err)
+    })
+}
+
+
+

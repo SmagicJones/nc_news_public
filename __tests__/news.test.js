@@ -438,6 +438,25 @@ describe('patch article', () => {
 
 })
 
+describe('delete article', () => {
+    it('returns an error message for a article_id that is not found', () => {
+        return request(app)
+            .delete('/api/articles/999999')
+            .expect(404)
+            .then((result) => {
+                expect(result.body.message).toBe('this article does not exist')
+            })
+    })
+    it('returns no content', () => {
+        return request(app)
+            .delete('/api/articles/1')
+            .expect(204)
+            .then((result) => {
+                expect(Object.keys(result.body).length).toBe(0)
+            })
+    })
+})
+
 describe('deleteComment', () => {
     it('returns an error message for a comment_id that is not found', () => {
         return request(app)

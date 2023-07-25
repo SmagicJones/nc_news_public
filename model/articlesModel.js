@@ -157,3 +157,20 @@ exports.postArticleModel = (articleObj) => {
         })
 
 }
+
+
+
+exports.deleteArticleModel = (article_id) => {
+    return db.query('SELECT * FROM articles WHERE article_id = $1', [article_id]).then((result) => {
+        if (result.rows.length === 0) {
+            console.log(result.rows, "what is this")
+            return Promise.reject({
+                status: 404,
+                message: "this article does not exist"
+            })
+        }
+    }).then(() => {
+        return db.query(`DELETE FROM articles 
+                        WHERE article_id in ($1)`, [article_id])
+    })
+}
