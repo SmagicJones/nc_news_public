@@ -187,7 +187,6 @@ describe('get users', () => {
                     expect(typeof user.avatar_url).toBe('string')
                 })
             })
-
     })
 
 })

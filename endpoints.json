@@ -9,6 +9,18 @@
       "topics": [{ "slug": "football", "description": "Footie!" }]
     }
   },
+  "POST /api/topics": {
+    "description": "ability to add a new topic",
+    "queries": [],
+    "exampleBody": {
+      "body": [
+        {
+          "slug": "this is awesome",
+          "description": "the best thing you will ever read"
+      }
+      ]
+    }
+  },
   "GET /api/articles": {
     "description": "serves an array of all topics",
     "queries": ["author", "topic", "sort_by", "order"],
@@ -22,6 +34,139 @@
           "created_at": "2018-05-30T15:59:13.341Z",
           "votes": 0,
           "comment_count": 6
+        }
+      ]
+    }
+  },
+  "POST /api/articles": {
+    "description": "ability to post a new article",
+    "queries": [],
+    "exampleBody": {
+      "article": [
+        {
+          "author": "Captain Beefheart",
+          "title": "play it like it's lasting longer",
+          "body": "Text from the article..",
+          "article_img_url": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cakephp/cakephp-original.svg"
+        }
+      ]
+    }
+  },
+  "GET /api/articles/:article_id": {
+    "description": "serves an individual article",
+    "queries": [],
+    "exampleResponse": {
+      "article": [
+        {
+          "title": "Seafood substitutions are increasing",
+          "topic": "cooking",
+          "author": "weegembump",
+          "body": "Text from the article..",
+          "created_at": "2018-05-30T15:59:13.341Z",
+          "votes": 0,
+          "comment_count": 6
+        }
+      ]
+    }
+  },
+  "PATCH /api/articles/:article_id": {
+    "description": "up or downvote an article",
+    "queries": [],
+    "exampleBody": {
+      "body": [
+        {
+            "inc_votes": 1
+        }
+      ]
+    }
+  },
+  "DELETE /api/articles/:article_id": {
+    "description": "delete an article",
+    "queries": [],
+    "exampleResponse": {
+      "body": []
+    }
+  },
+  "GET /api/articles/:article_id/comments": {
+    "description": "serves the comments on an individual article",
+    "queries": [],
+    "exampleResponse": {
+      "comments": [
+        {
+          "comment_id": 5,
+          "body": "I hate streaming noses",
+          "article_id": 1,
+          "author": "icellusedkars",
+          "votes": 0,
+          "created_at": "2020-11-03T21:00:00.000Z"
+        },
+        {
+          "comment_id": 2,
+          "body": "The beautiful thing about treasure is that it exists. Got to find out what kind of sheets these are; not cotton, not rayon, silky.",
+          "article_id": 1,
+          "author": "butter_bridge",
+          "votes": 14,
+          "created_at": "2020-10-31T03:03:00.000Z"
+        }
+      ]
+    }
+  },
+  "POST /api/articles/:article_id/comments": {
+    "description": "post a new comment on an individual article",
+    "queries": [],
+    "exampleResponse": {
+      "article": [
+         {
+          "comment_id": 19,
+          "body": "this is really excellent",
+          "article_id": 1,
+          "author": "rogersop",
+          "votes": 0,
+          "created_at": "2023-07-25T19:51:56.486Z"
+        }
+      ]
+    }
+  },
+  "GET /api/users": {
+    "description": "serves a list of users",
+    "queries": [],
+    "exampleResponse": {
+        "users": [
+        {
+          "username": "butter_bridge",
+          "name": "jonny",
+          "avatar_url": "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg"
+        }
+      ]
+    }
+  },
+  "GET /api/users/:username": {
+    "description": "serves an individual user",
+    "queries": [],
+    "exampleResponse": {
+        "users": [
+        {
+          "username": "butter_bridge",
+          "name": "jonny",
+          "avatar_url": "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg"
+        }
+      ]
+    }
+  },
+  "DELETE /api/comments/:comment_id": {
+    "description": "delete a comment",
+    "queries": [],
+    "exampleResponse": {
+      "body": []
+    }
+  },
+  "PATCH /api/comments/:comment_id": {
+    "description": "up or downvote a comment",
+    "queries": [],
+    "exampleBody": {
+      "body": [
+        {
+            "inc_votes": 1
         }
       ]
     }
