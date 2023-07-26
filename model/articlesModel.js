@@ -1,16 +1,16 @@
 const db = require('../db/connection')
 
+const {checkArticleExists} = require('../db/seeds/utils')
+
 
 exports.fetchArticle = (article_id) => {
-    return db.query(`SELECT articles.*, COUNT(comments.article_id) AS comment_count
-    FROM articles
-    LEFT JOIN comments USING (article_id)
-    WHERE article_id = $1
-    GROUP BY articles.article_id;`, [article_id])
-    .then((result) => {
-        if(result.rows.length === 0){
-            return Promise.reject({status: 404, message: 'No article by that ID'})
-        }
+    return checkArticleExists(article_id).then(()=>{
+        return db.query(`SELECT articles.*, COUNT(comments.article_id) AS comment_count
+        FROM articles
+        LEFT JOIN comments USING (article_id)
+        WHERE article_id = $1
+        GROUP BY articles.article_id;`, [article_id])
+    }).then((result)=>{
         return result.rows
     })
 }
@@ -74,21 +74,15 @@ exports.fetchArticles = (topic, order="desc", sort_by="created_at", limit=10, p=
 
 
 exports.fetchArticleComments = (article_id, limit=10, p=1) => {
-    return db.query(`SELECT * FROM articles WHERE article_id = $1`, [article_id]).then((result) => {
-        if (result.rows.length === 0) {
-            return Promise.reject({
-                status: 404,
-                message: "not found"
-            })
-        }
-        if(isNaN(limit)){
-            return Promise.reject({status: 400, message: "This is not a valid limit"});
-        }
-        if(isNaN(p)){
-            return Promise.reject({status: 400, message: "This is not a valid limit"});
-        }
-
-    }).then(() => {
+        return checkArticleExists(article_id).then(()=>{
+            if(isNaN(limit)){
+                return Promise.reject({status: 400, message: "This is not a valid limit"});
+            }
+            if(isNaN(p)){
+                return Promise.reject({status: 400, message: "This is not a valid limit"});
+            }
+        })
+    .then(() => {
         return db.query(`SELECT * FROM comments
     WHERE comments.article_id = $1
     ORDER BY created_at DESC
@@ -100,14 +94,8 @@ exports.fetchArticleComments = (article_id, limit=10, p=1) => {
 }
 
 exports.patchArticleModel = (article_id, patchObj) => {
-    return db.query('SELECT * FROM articles WHERE article_id = $1', [article_id]).then((result) => {
-        if (result.rows.length === 0) {
-            return Promise.reject({
-                status: 404,
-                message: 'not found'
-            })
-        }
-    }).then(() => {
+    return checkArticleExists(article_id)
+        .then(() => {
         if (!patchObj.hasOwnProperty('inc_votes')) {
             return Promise.reject({
                 status: 400,
@@ -161,15 +149,8 @@ exports.postArticleModel = (articleObj) => {
 
 
 exports.deleteArticleModel = (article_id) => {
-    return db.query('SELECT * FROM articles WHERE article_id = $1', [article_id]).then((result) => {
-        if (result.rows.length === 0) {
-            console.log(result.rows, "what is this")
-            return Promise.reject({
-                status: 404,
-                message: "this article does not exist"
-            })
-        }
-    }).then(() => {
+    return checkArticleExists(article_id)
+    .then(() => {
         return db.query(`DELETE FROM articles 
                         WHERE article_id in ($1)`, [article_id])
     })

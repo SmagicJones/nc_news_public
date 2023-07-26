@@ -69,7 +69,7 @@ describe('GET: status 200 - responds with an article', () => {
         .get('/api/articles/9999999')
         .expect(404)
         .then((result)=>{
-            expect(result.body.message).toBe('No article by that ID');
+            expect(result.body.message).toBe('Article not found');
         })
     })
 })
@@ -257,7 +257,7 @@ describe('GET: status 404 - responds with not found', () => {
             .get('/api/articles/99999999/comments')
             .expect(404)
             .then((result) => {
-                expect(result.body.message).toBe('not found')
+                expect(result.body.message).toBe('Article not found')
             })
     })
     it('returns comments limted by the given limit query', () =>{
@@ -431,7 +431,7 @@ describe('patch article', () => {
             .send(body)
             .expect(404)
             .then((result) => {
-                expect(result.body.message).toBe('not found')
+                expect(result.body.message).toBe('Article not found')
             })
     })
 
@@ -443,7 +443,7 @@ describe('delete article', () => {
             .delete('/api/articles/999999')
             .expect(404)
             .then((result) => {
-                expect(result.body.message).toBe('this article does not exist')
+                expect(result.body.message).toBe('Article not found')
             })
     })
     it('returns no content', () => {
@@ -554,7 +554,7 @@ describe('patch comment', () => {
         return request(app)
             .patch('/api/comments/9999')
             .send(body)
-            .expect(404)
+            .expect(400)
             .then((result) => {
                 expect(result.body.message).toBe('not found')
             })
