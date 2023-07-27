@@ -21,7 +21,7 @@ afterAll(() => {
 describe('invalid endpoint', () => {
     it('returns an object displaying invalid endpoint message', () => {
         return request(app)
-            .get('/api/smells')
+            .get('/api/nonsense')
             .expect(404)
             .then((result) => {
                 expect(result.body.message).toBe('invalid endpoint')
@@ -126,7 +126,7 @@ describe('GET: status 200 - responds with all the articles', () => {
     })
     it('returns all the articles with a given topic query', () => {
         return request(app)
-            .get('/api/articles?topic=gobobgobob')
+            .get('/api/articles?topic=nonsense')
             .expect(404)
             .then((result) => {
                expect(result.body.message).toBe('not found')
@@ -243,7 +243,7 @@ describe('GET: status 200 - responds with an empty array', () => {
 describe('GET: status 400 - responds with not found', () => {
     it('returns a status code of 400 and a message Invalid input', () => {
         return request(app)
-            .get('/api/articles/dog/comments')
+            .get('/api/articles/nonsense/comments')
             .expect(400)
             .then((result) => {
                 expect(result.body.message).toBe('Invalid input')
@@ -488,7 +488,7 @@ describe('getuser', () =>{
     })
     it('retuns 404 when given username not in db', () => {
         return request(app)
-        .get('/api/users/bobby')
+        .get('/api/users/steve')
         .expect(404)
         .then((result) => {
             expect(result.body.message).toBe('user not found');
